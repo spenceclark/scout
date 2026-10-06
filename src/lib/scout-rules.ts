@@ -17,9 +17,33 @@ export interface ChecklistItem {
   label: string;
   status: "covered" | "partial" | "missing";
   note: string;
+  /** Requirement text as returned by Cairn (guidance / evidence slot). Null for items Scout added. */
+  requirement?: string | null;
+  source?: "cairn" | "scout";
+  slotId?: string | null;
+  /** Photos that together satisfy this item. */
+  evidencePhotoIds?: string[];
 }
 
-/** Ready only when every checklist item is covered. */
+const key = (i: ChecklistItem) => (i.slotId ? `slot:${i.slotId}|${i.requirement ?? i.label}` : `req:${i.requirement ?? i.label}`);
+
+/**
+ * Merge a model-proposed checklist with the previous one. Cairn-sourced requirements can never be
+ * silently dropped or reworded away: any missing from the new list are restored with their last status.
+ */
+export function mergeChecklist(prev: ChecklistItem[], next: ChecklistItem[]): ChecklistItem[] {
+  const nextKeys = new Set(next.map(key));
+  const restored = prev.filter((p) => p.source === "cairn" && !nextKeys.has(key(p)));
+  return [...next, ...restored];
+}
+
+/** A covered item must cite what satisfies it (photos or a written observation). */
+export function itemSatisfied(i: ChecklistItem): boolean {
+  if (i.status !== "covered") return false;
+  return (i.evidencePhotoIds?.length ?? 0) > 0 || i.note.trim().length > 0;
+}
+
+/** Ready only when every checklist item is covered with stated evidence. */
 export function checklistReady(items: ChecklistItem[]): boolean {
-  return items.length > 0 && items.every((i) => i.status === "covered");
+  return items.length > 0 && items.every(itemSatisfied);
 }

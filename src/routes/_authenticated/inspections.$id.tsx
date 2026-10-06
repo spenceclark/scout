@@ -39,7 +39,7 @@ export const Route = createFileRoute("/_authenticated/inspections/$id")({
 });
 
 type Entry = { role: "user" | "assistant"; text: string; photoIds?: string[]; activity?: string[]; at: string };
-type ChecklistItem = { label: string; status: "covered" | "partial" | "missing"; note: string };
+type ChecklistItem = { label: string; status: "covered" | "partial" | "missing"; note: string; requirement?: string | null; source?: string };
 type Photo = {
   id: string;
   storage_path: string;
@@ -205,7 +205,7 @@ function InspectionPage() {
             {showChecklist && (
               <ul className="space-y-2 border-t px-3 py-3">
                 {checklist.map((c) => (
-                  <li key={c.label} className="flex gap-2.5 text-sm">
+                  <li key={`${c.label}-${c.requirement ?? ""}`} className="flex gap-2.5 text-sm">
                     {c.status === "covered" ? (
                       <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-success" />
                     ) : c.status === "partial" ? (
@@ -216,6 +216,9 @@ function InspectionPage() {
                     <div>
                       <div className={cn(c.status === "covered" ? "text-foreground" : "text-foreground")}>{c.label}</div>
                       {c.note && <div className="text-xs text-muted-foreground">{c.note}</div>}
+                      {c.source === "cairn" && c.requirement && (
+                        <div className="mt-0.5 text-[11px] italic text-muted-foreground">Cairn: {c.requirement}</div>
+                      )}
                     </div>
                   </li>
                 ))}
