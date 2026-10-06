@@ -39,7 +39,7 @@ export const Route = createFileRoute("/_authenticated/inspections/$id")({
 });
 
 type Entry = { role: "user" | "assistant"; text: string; photoIds?: string[]; activity?: string[]; at: string };
-type ChecklistItem = { label: string; status: "covered" | "partial" | "missing"; note: string; requirement?: string | null; source?: string };
+type ChecklistItem = { scope?: "field_evidence" | "office_follow_up"; label: string; status: "covered" | "partial" | "missing"; note: string; requirement?: string | null; source?: string };
 type Photo = {
   id: string;
   storage_path: string;
@@ -103,7 +103,8 @@ function InspectionPage() {
   const transcript = (insp.data?.transcript as Entry[] | undefined) ?? [];
   const checklist = (insp.data?.checklist as ChecklistItem[] | undefined) ?? [];
   const photoMap = useMemo(() => new Map((photos.data?.rows ?? []).map((p) => [p.id, p])), [photos.data]);
-  const covered = checklist.filter((c) => c.status === "covered").length;
+  const fieldChecklist = checklist.filter((c) => c.scope !== "office_follow_up");
+  const covered = fieldChecklist.filter((c) => c.status === "covered").length;
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -195,10 +196,10 @@ function InspectionPage() {
               aria-expanded={showChecklist}
             >
               <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted">
-                <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${(covered / checklist.length) * 100}%` }} />
+                <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${(covered / (fieldChecklist.length || 1)) * 100}%` }} />
               </div>
               <span className="text-sm font-medium">
-                {insp.data?.ready ? "Ready" : `${covered}/${checklist.length} covered`}
+                {insp.data?.ready ? "Ready" : `${covered}/${fieldChecklist.length} covered`}
               </span>
               <ChevronDown className={cn("h-4 w-4 text-muted-foreground transition-transform", showChecklist && "rotate-180")} />
             </button>
@@ -214,7 +215,7 @@ function InspectionPage() {
                       <Circle className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
                     )}
                     <div>
-                      <div className={cn(c.status === "covered" ? "text-foreground" : "text-foreground")}>{c.label}</div>
+                      <div className={cn(c.status === "covered" ? "text-foreground" : "text-foreground")}>{c.label}{c.scope === "office_follow_up" && " · Office follow-up (does not block submission)"}</div>
                       {c.note && <div className="text-xs text-muted-foreground">{c.note}</div>}
                       {c.source === "cairn" && c.requirement && (
                         <div className="mt-0.5 text-[11px] italic text-muted-foreground">{c.requirement}</div>

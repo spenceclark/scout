@@ -14,6 +14,8 @@ export function canSubmitEvidence(ready: boolean): boolean {
 }
 
 export interface ChecklistItem {
+  /** Legacy items default to field evidence until explicitly reclassified. */
+  scope?: "field_evidence" | "office_follow_up";
   label: string;
   status: "covered" | "partial" | "missing";
   note: string;
@@ -43,7 +45,8 @@ export function itemSatisfied(i: ChecklistItem): boolean {
   return (i.evidencePhotoIds?.length ?? 0) > 0 || i.note.trim().length > 0;
 }
 
-/** Ready only when every checklist item is covered with stated evidence. */
+/** Office follow-up remains visible but does not gate proposing field evidence. */
 export function checklistReady(items: ChecklistItem[]): boolean {
-  return items.length > 0 && items.every(itemSatisfied);
+  const fieldItems = items.filter((i) => i.scope !== "office_follow_up");
+  return fieldItems.length > 0 && fieldItems.every(itemSatisfied);
 }
