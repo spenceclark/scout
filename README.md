@@ -1,10 +1,10 @@
 # Scout
 
-**Get the right evidence before you leave.**
-
 Scout is a mobile-first field assistant for a finctional company, Astwood Property Management Services. Staff describe a maintenance problem, take photographs and get practical guidance on what evidence is still needed before leaving the property.
 
 Scout connects to Cairn to find the property and maintenance record, read the procedure's evidence requirements, and submit photographs and notes for human review. A live checklist shows progress, and a handover summary closes the visit. Approval and maintenance scheduling remain with the office.
+
+Live URL: https://scout-hackathon.lovable.app/
 
 ## Built at the hackathon
 
