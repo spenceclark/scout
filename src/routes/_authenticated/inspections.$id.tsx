@@ -181,7 +181,7 @@ function InspectionPage() {
                   {insp.data.procedure_name ? ` · ${insp.data.procedure_name}` : ""}
                 </>
               ) : (
-                "No Cairn record yet"
+                "No record yet"
               )}
             </div>
           </div>
@@ -217,7 +217,7 @@ function InspectionPage() {
                       <div className={cn(c.status === "covered" ? "text-foreground" : "text-foreground")}>{c.label}</div>
                       {c.note && <div className="text-xs text-muted-foreground">{c.note}</div>}
                       {c.source === "cairn" && c.requirement && (
-                        <div className="mt-0.5 text-[11px] italic text-muted-foreground">Cairn: {c.requirement}</div>
+                        <div className="mt-0.5 text-[11px] italic text-muted-foreground">{c.requirement}</div>
                       )}
                     </div>
                   </li>
@@ -233,7 +233,7 @@ function InspectionPage() {
           <div className="mx-auto mt-6 max-w-sm text-center">
             <ScoutMark className="mx-auto h-11 w-11" />
             <h2 className="mt-4 text-2xl font-semibold">Where are you?</h2>
-            <p className="mt-2 text-muted-foreground">Tell me the property and what you're investigating.</p>
+            <p className="mt-2 text-muted-foreground">Tell me the site and what you're investigating.</p>
           </div>
         )}
         <div className="space-y-5">
@@ -286,7 +286,7 @@ function InspectionPage() {
                 <ReactMarkdown>{insp.data.summary}</ReactMarkdown>
               </div>
               <p className="mt-3 text-xs text-muted-foreground">
-                Evidence is proposed for office review in Cairn. Scheduling the visit is handled by the office.
+                Evidence is proposed for office review. Scheduling the visit is handled by the office.
               </p>
             </div>
           )}
@@ -368,7 +368,7 @@ function PhotoTile({ photo, url }: { photo?: Photo | undefined; url?: string | u
   const status = photo?.upload_status;
   const badge =
     status === "submitted"
-      ? { t: "Sent to Cairn", c: "bg-primary text-primary-foreground" }
+      ? { t: "Sent for review", c: "bg-primary text-primary-foreground" }
       : status === "uploading"
         ? { t: "Sending…", c: "bg-secondary text-secondary-foreground" }
         : status === "failed"

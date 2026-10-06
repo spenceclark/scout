@@ -9,9 +9,9 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Scout — Field evidence for Astwood" },
-      { name: "description", content: "Scout helps Astwood staff collect maintenance evidence on site and propose it to Cairn for review." },
+      { name: "description", content: "Scout helps Astwood staff collect maintenance evidence on site and propose it for office review." },
       { property: "og:title", content: "Scout — Field evidence for Astwood" },
-      { property: "og:description", content: "Collect maintenance photos and notes on site, guided by live Cairn procedures." },
+      { property: "og:description", content: "Collect maintenance photos and notes on site, guided by the live procedure for each site." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
@@ -39,9 +39,9 @@ function Index() {
       </p>
       <ul className="mt-10 space-y-5">
         {[
-          { icon: ClipboardCheck, t: "Follows the live Cairn procedure for each property" },
+          { icon: ClipboardCheck, t: "Follows the live procedure for each site" },
           { icon: Camera, t: "Checks your photos and asks for what's missing" },
-          { icon: Send, t: "Proposes evidence to Cairn for office review" },
+          { icon: Send, t: "Proposes evidence for office review" },
         ].map(({ icon: Icon, t }) => (
           <li key={t} className="flex items-start gap-3">
             <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent text-accent-foreground">

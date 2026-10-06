@@ -11,7 +11,7 @@ export const Route = createFileRoute("/_authenticated/inspections/")({
   head: () => ({
     meta: [
       { title: "Inspections — Scout" },
-      { name: "description", content: "Your site inspections and the evidence collected for Cairn." },
+      { name: "description", content: "Your site inspections and the evidence collected." },
       { property: "og:title", content: "Inspections — Scout" },
       { property: "og:description", content: "Your site inspections in Scout." },
       { property: "og:type", content: "website" },
