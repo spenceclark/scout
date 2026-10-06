@@ -112,11 +112,11 @@ function InspectionPage() {
     if (!sending) textRef.current?.focus();
   }, [sending, id]);
 
-  async function addFiles(files: FileList | null) {
-    if (!files?.length) return;
+  async function addFiles(files: File[]) {
+    if (!files.length) return;
     const { data: u } = await supabase.auth.getUser();
     if (!u.user) return;
-    for (const file of Array.from(files)) {
+    for (const file of files) {
       setUploading((n) => n + 1);
       try {
         const img = await prepareImage(file);
@@ -325,8 +325,8 @@ function InspectionPage() {
             <ImagePlus className="mr-1.5 h-5 w-5" /> Upload
           </Button>
         </div>
-        <input ref={cameraRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => { addFiles(e.target.files); e.target.value = ""; }} />
-        <input ref={libraryRef} type="file" accept="image/*" multiple className="hidden" onChange={(e) => { addFiles(e.target.files); e.target.value = ""; }} />
+        <input ref={cameraRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => { const f = Array.from(e.target.files ?? []); e.target.value = ""; addFiles(f); }} />
+        <input ref={libraryRef} type="file" accept="image/*" multiple className="hidden" onChange={(e) => { const f = Array.from(e.target.files ?? []); e.target.value = ""; addFiles(f); }} />
         <form
           className="flex items-end gap-2 rounded-2xl border bg-card p-1.5 focus-within:ring-2 focus-within:ring-ring"
           onSubmit={(e) => {
