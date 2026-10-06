@@ -36,7 +36,19 @@ const key = (i: ChecklistItem) => (i.slotId ? `slot:${i.slotId}|${i.requirement 
 export function mergeChecklist(prev: ChecklistItem[], next: ChecklistItem[]): ChecklistItem[] {
   const nextKeys = new Set(next.map(key));
   const restored = prev.filter((p) => p.source === "cairn" && !nextKeys.has(key(p)));
-  return [...next, ...restored];
+  return [...next, ...restored].map(classifyScope);
+}
+
+const OFFICE_PATTERN =
+  /\b(schedul\w*|visit arrangements?|arrang\w* (a |the )?(visit|appointment|access|contractor)|book\w* (a |the )?(visit|appointment|contractor)|appointment|contractor availability|tenant availability|access arrangements?)\b/i;
+
+/** Visit scheduling/arrangement items are office follow-up regardless of how the model labelled them. */
+export function classifyScope(i: ChecklistItem): ChecklistItem {
+  const text = `${i.label} ${i.requirement ?? ""}`;
+  if (i.scope !== "office_follow_up" && OFFICE_PATTERN.test(text) && !/\bphoto/i.test(i.label)) {
+    return { ...i, scope: "office_follow_up" };
+  }
+  return i;
 }
 
 /** A covered item must cite what satisfies it (photos or a written observation). */

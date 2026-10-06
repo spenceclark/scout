@@ -64,7 +64,19 @@ describe("Cairn requirements are preserved", () => {
     const scheduling = { ...locate, label: "Arrange visit", requirement: "Arrange a maintenance visit", slotId: "office-slot" };
     const merged = mergeChecklist([scheduling], [{ ...scheduling, scope: "office_follow_up" }]);
     expect(merged).toHaveLength(1);
-    expect(merged[0].status).toBe("partial");
-    expect(merged[0].scope).toBe("office_follow_up");
+    expect(merged[0]?.status).toBe("partial");
+    expect(merged[0]?.scope).toBe("office_follow_up");
+  });
+});
+
+import { classifyScope as _cs, checklistReady as _cr } from "./scout-rules";
+describe("visit arrangements", () => {
+  it("never block field evidence readiness", () => {
+    const items = [
+      { label: "Damage photos", status: "covered" as const, note: "ok", evidencePhotoIds: ["p1"] },
+      { label: "Visit arrangements", status: "missing" as const, note: "", source: "cairn" as const, requirement: "Arrange a visit with the tenant" },
+    ].map(_cs);
+    expect(items[1]?.scope).toBe("office_follow_up");
+    expect(_cr(items)).toBe(true);
   });
 });
