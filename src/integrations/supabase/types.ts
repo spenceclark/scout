@@ -14,7 +14,128 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      inspection_photos: {
+        Row: {
+          assessment: string | null
+          assessment_status: string
+          cairn_candidate_id: string | null
+          created_at: string
+          filename: string
+          id: string
+          inspection_id: string
+          mime_type: string
+          placement: string | null
+          proposed_slot_id: string | null
+          proposed_step_id: string | null
+          size_bytes: number
+          storage_path: string
+          updated_at: string
+          upload_error: string | null
+          upload_status: string
+          user_id: string
+        }
+        Insert: {
+          assessment?: string | null
+          assessment_status?: string
+          cairn_candidate_id?: string | null
+          created_at?: string
+          filename: string
+          id?: string
+          inspection_id: string
+          mime_type: string
+          placement?: string | null
+          proposed_slot_id?: string | null
+          proposed_step_id?: string | null
+          size_bytes: number
+          storage_path: string
+          updated_at?: string
+          upload_error?: string | null
+          upload_status?: string
+          user_id?: string
+        }
+        Update: {
+          assessment?: string | null
+          assessment_status?: string
+          cairn_candidate_id?: string | null
+          created_at?: string
+          filename?: string
+          id?: string
+          inspection_id?: string
+          mime_type?: string
+          placement?: string | null
+          proposed_slot_id?: string | null
+          proposed_step_id?: string | null
+          size_bytes?: number
+          storage_path?: string
+          updated_at?: string
+          upload_error?: string | null
+          upload_status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inspection_photos_inspection_id_fkey"
+            columns: ["inspection_id"]
+            isOneToOne: false
+            referencedRelation: "inspections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      inspections: {
+        Row: {
+          checklist: Json
+          created_at: string
+          history: Json
+          id: string
+          procedure_name: string | null
+          ready: boolean
+          record_reference: string | null
+          subject_name: string | null
+          subject_reference: string | null
+          submissions: Json
+          summary: string | null
+          title: string
+          transcript: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          checklist?: Json
+          created_at?: string
+          history?: Json
+          id?: string
+          procedure_name?: string | null
+          ready?: boolean
+          record_reference?: string | null
+          subject_name?: string | null
+          subject_reference?: string | null
+          submissions?: Json
+          summary?: string | null
+          title?: string
+          transcript?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          checklist?: Json
+          created_at?: string
+          history?: Json
+          id?: string
+          procedure_name?: string | null
+          ready?: boolean
+          record_reference?: string | null
+          subject_name?: string | null
+          subject_reference?: string | null
+          submissions?: Json
+          summary?: string | null
+          title?: string
+          transcript?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
