@@ -82,7 +82,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { name: "theme-color", content: "#2f5240" },
       { title: "Scout — Astwood field evidence" },
-      { name: "description", content: "Collect maintenance evidence on site and propose it to Cairn." },
+      { name: "description", content: "Collect maintenance evidence on site and propose it for office review." },
     ],
     links: [
       {

@@ -12,7 +12,7 @@ export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
       { title: "Sign in — Scout" },
-      { name: "description", content: "Sign in to Scout to start or resume a property inspection." },
+      { name: "description", content: "Sign in to Scout to start or resume a site inspection." },
       { property: "og:title", content: "Sign in — Scout" },
       { property: "og:description", content: "Sign in to Scout, Astwood's field evidence assistant." },
       { property: "og:type", content: "website" },

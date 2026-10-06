@@ -38,7 +38,8 @@ Evidence assessment rules:
 - Scheduling the maintenance visit is an office task; do not offer to schedule.
 - Only describe a photo as submitted after submit_photo returns success. If a submission fails, say so plainly and offer to retry.
 
-Style: concise, warm, practical. Short paragraphs. The user is standing on site with a phone. Reply in British English.`;
+Style: concise, warm, practical. Short paragraphs. The user is standing on site with a phone. Reply in British English.
+- Never name the internal records system in your replies — say "the office system" or simply "the office". Say "site", never "property", when talking to the user.`;
 
 const nullableString = { type: ["string", "null"] };
 
@@ -114,21 +115,21 @@ const TOOLS = [
     stepId: { type: "string" },
     slotId: { type: "string" },
   }),
-  fn("finish", "Save the final handover summary (include the Cairn record reference and what was proposed).", {
+  fn("finish", "Save the final handover summary (include the record reference and what was proposed).", {
     summary: { type: "string" },
   }),
 ];
 
 const ACTIVITY: Record<string, string> = {
-  find_subjects: "Searched Cairn properties",
+  find_subjects: "Searched sites",
   find_records: "Checked existing records",
   get_startable_procedures: "Looked up procedures",
   start_record: "Started a Site Maintenance Request",
   get_record_steps: "Read procedure guidance",
   record_photo_assessment: "Assessed photo",
   update_checklist: "Updated checklist",
-  submit_assertion: "Proposed notes to Cairn",
-  submit_photo: "Uploaded photo to Cairn",
+  submit_assertion: "Proposed notes for review",
+  submit_photo: "Uploaded photo for review",
   finish: "Prepared handover",
 };
 
@@ -338,7 +339,7 @@ export async function runScoutTurn(opts: {
             slotId: args.slotId,
           });
           if (!r.ok) {
-            const msg = `Cairn rejected the upload (${r.status}): ${JSON.stringify(r.body).slice(0, 200)}`;
+            const msg = `The office system rejected the upload (${r.status}): ${JSON.stringify(r.body).slice(0, 200)}`;
             await supabase.from("inspection_photos").update({ upload_status: "failed", upload_error: msg }).eq("id", p.id);
             return { success: false, error: msg };
           }
