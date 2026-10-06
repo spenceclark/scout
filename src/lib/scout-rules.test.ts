@@ -64,8 +64,8 @@ describe("Cairn requirements are preserved", () => {
     const scheduling = { ...locate, label: "Arrange visit", requirement: "Arrange a maintenance visit", slotId: "office-slot" };
     const merged = mergeChecklist([scheduling], [{ ...scheduling, scope: "office_follow_up" }]);
     expect(merged).toHaveLength(1);
-    expect(merged[0].status).toBe("partial");
-    expect(merged[0].scope).toBe("office_follow_up");
+    expect(merged[0]?.status).toBe("partial");
+    expect(merged[0]?.scope).toBe("office_follow_up");
   });
 });
 
