@@ -1,5 +1,5 @@
 import { callCairnTool, uploadPhotoCandidate } from "./cairn.server";
-import { canSubmitEvidence, checklistReady, photoSubmitDecision, type ChecklistItem } from "./scout-rules";
+import { canSubmitEvidence, checklistReady, mergeChecklist, photoSubmitDecision, type ChecklistItem } from "./scout-rules";
 
 const MODEL = "gpt-6-astra";
 const BUCKET = "scout-photos";
@@ -280,16 +280,26 @@ export async function runScoutTurn(opts: {
         if (!photos.has(args.photoId)) return { error: "Unknown photo id" };
         await supabase
           .from("inspection_photos")
-          .update({ assessment: args.assessment, assessment_status: args.useful ? "useful" : "not_useful" })
+          .update({
+            assessment: args.relationship ? `${args.assessment}\n\nRelation to other photos: ${args.relationship}` : args.assessment,
+            assessment_status: args.useful ? "useful" : "not_useful" })
           .eq("id", args.photoId);
         return { saved: true };
       }
       case "update_checklist": {
-        checklist = args.items;
+        const before = checklist.length;
+        checklist = mergeChecklist(checklist, args.items);
+        const restored = checklist.length - args.items.length;
         ready = args.ready && checklistReady(checklist);
         patch["checklist"] = checklist;
         patch["ready"] = ready;
-        return { saved: true, ready, note: args.ready && !ready ? "Not every item is covered, so ready stays false." : undefined };
+        void before;
+        return {
+          saved: true,
+          ready,
+          restoredCairnRequirements: restored > 0 ? checklist.slice(-restored).map((i) => i.requirement) : undefined,
+          note: args.ready && !ready ? "Not every item is covered with cited evidence, so ready stays false." : undefined,
+        };
       }
       case "submit_assertion": {
         if (!canSubmitEvidence(ready)) return { error: "Collection is not marked ready yet. Cover all requirements first." };
