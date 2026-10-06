@@ -287,13 +287,11 @@ export async function runScoutTurn(opts: {
         return { saved: true };
       }
       case "update_checklist": {
-        const before = checklist.length;
         checklist = mergeChecklist(checklist, args.items);
         const restored = checklist.length - args.items.length;
         ready = args.ready && checklistReady(checklist);
         patch["checklist"] = checklist;
         patch["ready"] = ready;
-        void before;
         return {
           saved: true,
           ready,
