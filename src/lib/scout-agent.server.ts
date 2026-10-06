@@ -77,22 +77,27 @@ const TOOLS = [
     recordReference: nullableString,
     procedureName: nullableString,
   }),
-  fn("record_photo_assessment", "Save your assessment of one photo: what is visible and how it relates to the requirements.", {
+  fn("record_photo_assessment", "Save your assessment of one photo: what is visible, how it relates to the other photos, and how it relates to the requirements.", {
     photoId: { type: "string" },
     assessment: { type: "string" },
+    relationship: { type: "string", description: "How this photo links to the other photos (or 'unclear' and why)." },
     useful: { type: "boolean" },
   }),
-  fn("update_checklist", "Replace the evidence checklist shown to the user. ready=true only when every item is covered.", {
+  fn("update_checklist", "Replace the evidence checklist shown to the user. Cairn requirements you omit are restored automatically. ready=true only when every item is covered with cited evidence.", {
     items: {
       type: "array",
       items: {
         type: "object",
         properties: {
           label: { type: "string" },
+          requirement: { type: ["string", "null"], description: "Verbatim Cairn requirement text; null for Scout-added items." },
+          source: { type: "string", enum: ["cairn", "scout"] },
+          slotId: nullableString,
           status: { type: "string", enum: ["covered", "partial", "missing"] },
+          evidencePhotoIds: { type: "array", items: { type: "string" } },
           note: { type: "string" },
         },
-        required: ["label", "status", "note"],
+        required: ["label", "requirement", "source", "slotId", "status", "evidencePhotoIds", "note"],
         additionalProperties: false,
       },
     },
