@@ -233,10 +233,7 @@ function InspectionPage() {
           <div className="mx-auto mt-6 max-w-sm text-center">
             <ScoutMark className="mx-auto h-11 w-11" />
             <h2 className="mt-4 text-2xl font-semibold">Where are you?</h2>
-            <p className="mt-2 text-muted-foreground">
-              Tell me the property and what you're investigating, e.g. “I'm at 7 Elm Street inspecting a reported broken kitchen
-              cupboard hinge.”
-            </p>
+            <p className="mt-2 text-muted-foreground">Tell me the property and what you're investigating.</p>
           </div>
         )}
         <div className="space-y-5">
