@@ -339,7 +339,7 @@ export async function runScoutTurn(opts: {
             slotId: args.slotId,
           });
           if (!r.ok) {
-            const msg = `Cairn rejected the upload (${r.status}): ${JSON.stringify(r.body).slice(0, 200)}`;
+            const msg = `The office system rejected the upload (${r.status}): ${JSON.stringify(r.body).slice(0, 200)}`;
             await supabase.from("inspection_photos").update({ upload_status: "failed", upload_error: msg }).eq("id", p.id);
             return { success: false, error: msg };
           }
