@@ -68,3 +68,15 @@ describe("Cairn requirements are preserved", () => {
     expect(merged[0].scope).toBe("office_follow_up");
   });
 });
+
+import { classifyScope as _cs, checklistReady as _cr } from "./scout-rules";
+describe("visit arrangements", () => {
+  it("never block field evidence readiness", () => {
+    const items = [
+      { label: "Damage photos", status: "covered" as const, note: "ok", evidencePhotoIds: ["p1"] },
+      { label: "Visit arrangements", status: "missing" as const, note: "", source: "cairn" as const, requirement: "Arrange a visit with the tenant" },
+    ].map(_cs);
+    expect(items[1]?.scope).toBe("office_follow_up");
+    expect(_cr(items)).toBe(true);
+  });
+});
